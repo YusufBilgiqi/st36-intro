@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Introduction to the ST36 — A Visual Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,500;1,300&family=Fira+Code:wght@300;400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf7f2;
+    --surface: #f0ebe0;
+    --card: #ffffff;
+    --border: rgba(0,0,0,0.07);
+    --ink: #1e1a14;
+    --muted: #7a6f5e;
+    --text: #3a3020;
+    --brass: #c08828;
+    --brass-light: #e0a840;
+    --brass-dim: rgba(192,136,40,0.15);
+    --steel: #3a6a8a;
+    --steel-light: #5a9abf;
+    --steel-dim: rgba(58,106,138,0.12);
+    --ruby: #a03050;
+    --ruby-dim: rgba(160,48,80,0.12);
+    --ok: #2e7d50;
+    --ok-dim: rgba(46,125,80,0.1);
+    --warn: #c06820;
+    --warn-dim: rgba(192,104,32,0.1);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif; font-weight: 300; line-height: 1.75; }
+
+  /* HERO */
+  .hero {
+    background: var(--ink);
+    padding: 80px 32px 64px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(192,136,40,0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 50%, rgba(58,106,138,0.10) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  /* Gear pattern */
+  .hero-bg::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  .hero-tag { font-family: 'Fira Code', monospace; font-size: 10px; letter-spacing: 5px; color: var(--brass-light); text-transform: uppercase; margin-bottom: 16px; position: relative; }
+  .hero h1 { font-family: 'Fraunces', serif; font-size: clamp(38px, 7vw, 78px); font-weight: 300; line-height: 1.1; color: #f5f0e8; margin-bottom: 14px; position: relative; }
+  .hero h1 em { font-style: italic; color: var(--brass-light); }
+  .hero-sub { font-size: 15px; color: #9a9080; max-width: 540px; margin: 0 auto 36px; position: relative; }
+
+  /* Animated gears */
+  .gear-row { display: flex; gap: 0; justify-content: center; align-items: center; position: relative; }
+  .gear {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .gear svg { display: block; }
+  .gear-a { animation: spin 6s linear infinite; }
+  .gear-b { animation: spin 4s linear infinite reverse; }
+  .gear-c { animation: spin 8s linear infinite; }
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  /* NAV */
+  .nav { background: var(--ink); border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; gap: 5px; padding: 12px 20px; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; justify-content: center; }
+  .nav a { font-family: 'Fira Code', monospace; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #6a6050; text-decoration: none; padding: 5px 11px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.07); transition: all 0.2s; }
+  .nav a:hover { color: var(--brass-light); border-color: var(--brass); background: var(--brass-dim); }
+
+  /* LAYOUT */
+  .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+  .section { padding: 64px 0; border-bottom: 1px solid var(--border); }
+  .section-tag { font-family: 'Fira Code', monospace; font-size: 10px; letter-spacing: 4px; color: var(--brass); text-transform: uppercase; margin-bottom: 6px; }
+  .section h2 { font-family: 'Fraunces', serif; font-size: clamp(26px, 4vw, 44px); font-weight: 300; color: var(--ink); margin-bottom: 14px; line-height: 1.15; }
+  .section > .container > p, .prose { font-size: 15px; max-width: 700px; margin-bottom: 12px; }
+  .rule { width: 44px; height: 2px; background: var(--brass); margin: 8px 0 18px; border-radius: 2px; }
+
+  /* CARDS */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 22px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 20px; box-shadow: 0 1px 6px rgba(0,0,0,0.04); }
+  .card-icon { font-size: 24px; margin-bottom: 10px; }
+  .card h3 { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 500; margin-bottom: 6px; color: var(--ink); }
+  .card p { font-size: 13px; color: var(--muted); line-height: 1.65; }
+  .bt-brass { border-top: 3px solid var(--brass); }
+  .bt-steel { border-top: 3px solid var(--steel); }
+  .bt-ruby { border-top: 3px solid var(--ruby); }
+  .bt-ok { border-top: 3px solid var(--ok); }
+  .bt-warn { border-top: 3px solid var(--warn); }
+
+  /* VIS */
+  .vis { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 28px 32px; margin: 22px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+  .vis h3 { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 500; color: var(--ink); margin-bottom: 16px; }
+
+  /* DARK VIS */
+  .vis-dark { background: var(--ink); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 28px 32px; margin: 22px 0; }
+  .vis-dark h3 { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 300; color: var(--brass-light); margin-bottom: 16px; }
+
+  /* TWO-COL */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 18px; }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+  .info-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .info-header { padding: 10px 16px; font-family: 'Fira Code', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
+  .ih-brass { background: var(--brass); color: white; }
+  .ih-steel { background: var(--steel); color: white; }
+  .ih-ruby { background: var(--ruby); color: white; }
+  .ih-ok { background: var(--ok); color: white; }
+  .ih-warn { background: var(--warn); color: white; }
+  .ih-dark { background: var(--ink); color: var(--brass-light); }
+  .info-body { padding: 16px; font-size: 13.5px; color: var(--muted); line-height: 1.65; }
+  .info-body strong { color: var(--text); }
+
+  /* CALLOUT */
+  .callout { border-left: 3px solid var(--brass); padding: 13px 18px; background: var(--brass-dim); border-radius: 0 6px 6px 0; margin: 16px 0; font-size: 14px; color: var(--text); }
+  .callout.steel { border-color: var(--steel); background: var(--steel-dim); }
+  .callout.ruby { border-color: var(--ruby); background: var(--ruby-dim); }
+  .callout.ok { border-color: var(--ok); background: var(--ok-dim); }
+  .callout.warn { border-color: var(--warn); background: var(--warn-dim); }
+  .callout strong { color: var(--ink); }
+
+  /* BADGE */
+  .badge { font-family: 'Fira Code', monospace; font-size: 9px; letter-spacing: 1px; padding: 2px 8px; border-radius: 20px; text-transform: uppercase; display: inline-block; margin-bottom: 5px; }
+  .b-brass { background: var(--brass-dim); color: var(--brass); }
+  .b-steel { background: var(--steel-dim); color: var(--steel); }
+  .b-ruby { background: var(--ruby-dim); color: var(--ruby); }
+  .b-ok { background: var(--ok-dim); color: var(--ok); }
+  .b-warn { background: var(--warn-dim); color: var(--warn); }
+
+  /* TRAIN DIAGRAM */
+  .train-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 0; justify-content: center; margin-top: 20px; }
+  .train-node {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 10px 8px;
+  }
+  .tn-circle {
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-family: 'Fira Code', monospace; font-size: 9px; text-align: center; line-height: 1.3;
+    margin-bottom: 8px; flex-shrink: 0; position: relative; border: 2px solid;
+  }
+  .tn-label { font-size: 11px; color: var(--muted); text-align: center; max-width: 80px; }
+  .tn-sub { font-size: 10px; color: var(--muted); text-align: center; max-width: 80px; opacity: 0.7; }
+  .train-arrow { font-size: 18px; color: rgba(0,0,0,0.2); padding: 0 4px; margin-bottom: 16px; }
+
+  /* KEYLESS INTERACTIVE */
+  .keyless-demo { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 28px; margin: 22px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+  .keyless-demo h3 { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 500; color: var(--ink); margin-bottom: 16px; }
+  .kl-toggle { display: flex; gap: 10px; margin-bottom: 22px; }
+  .kl-btn { padding: 9px 22px; border-radius: 6px; border: 2px solid var(--border); background: var(--surface); color: var(--muted); font-size: 13px; cursor: pointer; font-family: 'Outfit', sans-serif; transition: all 0.2s; font-weight: 400; }
+  .kl-btn.active { border-color: var(--brass); background: var(--brass-dim); color: var(--brass); font-weight: 500; }
+  .kl-state { display: none; }
+  .kl-state.active { display: block; }
+  .kl-path { display: flex; align-items: flex-start; flex-wrap: wrap; gap: 0; margin-top: 12px; }
+  .kl-step {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 10px 14px;
+    font-size: 12.5px; color: var(--text); min-width: 110px; text-align: center; position: relative;
+  }
+  .kl-step strong { display: block; font-size: 11px; font-family: 'Fira Code', monospace; color: var(--brass); margin-bottom: 3px; letter-spacing: 0.5px; text-transform: uppercase; }
+  .kl-arr { font-size: 18px; color: var(--brass-light); padding: 0 6px; margin-top: 20px; }
+
+  /* JEWEL COUNTER */
+  .jewel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; margin-top: 16px; }
+  .jewel-item { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 12px 8px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+  .jewel-gem { font-size: 20px; margin-bottom: 4px; }
+  .jewel-name { font-size: 11px; color: var(--muted); line-height: 1.4; }
+  .jewel-count { font-family: 'Fira Code', monospace; font-size: 14px; color: var(--ruby); font-weight: 400; margin-bottom: 2px; }
+
+  /* TERM LOOKUP */
+  .terms-table { margin-top: 16px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+  .tt-header { display: grid; grid-template-columns: 1fr 1fr; background: var(--ink); padding: 10px 16px; font-family: 'Fira Code', monospace; font-size: 10px; letter-spacing: 1px; color: var(--brass-light); text-transform: uppercase; }
+  .tt-row { display: grid; grid-template-columns: 1fr 1fr; padding: 11px 16px; border-top: 1px solid var(--border); font-size: 13px; }
+  .tt-row:hover { background: rgba(192,136,40,0.04); }
+  .tt-row .term { color: var(--ink); font-weight: 400; }
+  .tt-row .alts { color: var(--muted); font-size: 12px; }
+
+  /* QUIZ */
+  .quiz { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 22px; margin: 20px 0; box-shadow: 0 1px 6px rgba(0,0,0,0.04); }
+  .quiz h3 { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 500; color: var(--ink); margin-bottom: 14px; }
+  .q-item { margin-bottom: 18px; }
+  .q-item p { font-size: 14px; color: var(--text); margin-bottom: 8px; }
+  .q-opts { display: flex; gap: 8px; flex-wrap: wrap; }
+  .q-btn { padding: 6px 14px; border-radius: 5px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: 12.5px; cursor: pointer; font-family: 'Outfit', sans-serif; transition: all 0.15s; }
+  .q-btn:hover { border-color: var(--brass); color: var(--brass); }
+  .q-btn.correct { background: var(--ok-dim); border-color: var(--ok); color: var(--ok); }
+  .q-btn.wrong { background: var(--ruby-dim); border-color: var(--ruby); color: var(--ruby); }
+  .q-fb { font-size: 12.5px; margin-top: 7px; color: var(--muted); display: none; }
+
+  /* CONSTRUCTION TIMELINE */
+  .timeline { position: relative; padding-left: 28px; margin-top: 20px; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--brass), var(--steel)); border-radius: 2px; }
+  .tl-item { position: relative; margin-bottom: 24px; }
+  .tl-dot { position: absolute; left: -24px; top: 5px; width: 12px; height: 12px; border-radius: 50%; background: var(--brass); border: 2px solid var(--bg); }
+  .tl-era { font-family: 'Fira Code', monospace; font-size: 10px; letter-spacing: 2px; color: var(--brass); text-transform: uppercase; margin-bottom: 3px; }
+  .tl-title { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+  .tl-body { font-size: 13.5px; color: var(--muted); }
+
+  /* SUMMARY */
+  .summary { background: var(--ink); padding: 56px 32px; text-align: center; }
+  .sum-tag { font-family: 'Fira Code', monospace; font-size: 10px; letter-spacing: 4px; color: var(--brass-light); text-transform: uppercase; margin-bottom: 14px; }
+  .summary blockquote { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: clamp(16px, 2.5vw, 22px); color: #f0ead8; max-width: 680px; margin: 0 auto; line-height: 1.65; }
+
+  footer { text-align: center; padding: 28px; font-family: 'Fira Code', monospace; font-size: 9px; letter-spacing: 2px; color: var(--muted); border-top: 1px solid var(--border); text-transform: uppercase; background: var(--surface); }
+  svg text { font-family: 'Outfit', sans-serif; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-tag">Watchmaking Fundamentals — Part V</div>
+  <h1>Introduction to<br>the <em>ST36</em></h1>
+  <p class="hero-sub">History of construction, the going train, motion work, keyless winding mechanism, and escapement basics — using the ETA 6497 clone as our reference movement.</p>
+  <div class="gear-row">
+    <svg class="gear-a" width="60" height="60" viewBox="0 0 60 60">
+      <circle cx="30" cy="30" r="12" fill="none" stroke="rgba(192,136,40,0.5)" stroke-width="2"/>
+      <circle cx="30" cy="30" r="5" fill="rgba(192,136,40,0.3)"/>
+      <g stroke="rgba(192,136,40,0.5)" stroke-width="3" stroke-linecap="round">
+        <line x1="30" y1="8" x2="30" y2="15"/><line x1="30" y1="45" x2="30" y2="52"/>
+        <line x1="8" y1="30" x2="15" y2="30"/><line x1="45" y1="30" x2="52" y2="30"/>
+        <line x1="14" y1="14" x2="19" y2="19"/><line x1="41" y1="41" x2="46" y2="46"/>
+        <line x1="46" y1="14" x2="41" y2="19"/><line x1="14" y1="46" x2="19" y2="41"/>
+      </g>
+    </svg>
+    <svg class="gear-b" width="44" height="44" viewBox="0 0 44 44">
+      <circle cx="22" cy="22" r="8" fill="none" stroke="rgba(58,106,138,0.5)" stroke-width="2"/>
+      <circle cx="22" cy="22" r="3" fill="rgba(58,106,138,0.3)"/>
+      <g stroke="rgba(58,106,138,0.5)" stroke-width="2.5" stroke-linecap="round">
+        <line x1="22" y1="4" x2="22" y2="10"/><line x1="22" y1="34" x2="22" y2="40"/>
+        <line x1="4" y1="22" x2="10" y2="22"/><line x1="34" y1="22" x2="40" y2="22"/>
+        <line x1="8" y1="8" x2="13" y2="13"/><line x1="31" y1="31" x2="36" y2="36"/>
+        <line x1="36" y1="8" x2="31" y2="13"/><line x1="8" y1="36" x2="13" y2="31"/>
+      </g>
+    </svg>
+    <svg class="gear-c" width="52" height="52" viewBox="0 0 52 52">
+      <circle cx="26" cy="26" r="10" fill="none" stroke="rgba(160,48,80,0.5)" stroke-width="2"/>
+      <circle cx="26" cy="26" r="4" fill="rgba(160,48,80,0.3)"/>
+      <g stroke="rgba(160,48,80,0.5)" stroke-width="2.5" stroke-linecap="round">
+        <line x1="26" y1="6" x2="26" y2="13"/><line x1="26" y1="39" x2="26" y2="46"/>
+        <line x1="6" y1="26" x2="13" y2="26"/><line x1="39" y1="26" x2="46" y2="26"/>
+        <line x1="10" y1="10" x2="15" y2="15"/><line x1="37" y1="37" x2="42" y2="42"/>
+        <line x1="42" y1="10" x2="37" y2="15"/><line x1="10" y1="42" x2="15" y2="37"/>
+      </g>
+    </svg>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="#history">History</a>
+  <a href="#construction">Construction</a>
+  <a href="#movement">The Movement</a>
+  <a href="#train">Train Wheels</a>
+  <a href="#barrel">Barrel</a>
+  <a href="#motionwork">Motion Work</a>
+  <a href="#keyless">Keyless Work</a>
+  <a href="#escapement">Escapement</a>
+  <a href="#terms">Alt. Terms</a>
+</nav>
+
+<!-- SECTION 1: HISTORY -->
+<div class="section" id="history">
+  <div class="container">
+    <div class="section-tag">01 — History</div>
+    <h2>From Handmade to Mass Production</h2>
+    <div class="rule"></div>
+    <p>Understanding how watch manufacturing evolved explains why modern watches are designed the way they are — and why they're so much easier to service than their ancestors.</p>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--muted)"></div>
+        <div class="tl-era">Pre-1850s</div>
+        <div class="tl-title">The Handmade Era</div>
+        <div class="tl-body">Every part individually fitted by a skilled craftsman. Parts were not interchangeable — a replacement had to be made and hand-fitted each time. Beautiful, but slow and expensive to make and repair. English and high-grade Swiss work fell into this category.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--steel)"></div>
+        <div class="tl-era">Mid-1800s onward</div>
+        <div class="tl-title">Early Mass Production (American Lead)</div>
+        <div class="tl-body">Swiss and American factories adopted machine production. Parts were made to tolerances tight enough that assemblers could pick components from bins and fit them together with minimal adjustment. Cheaper, faster, and more reliable for repairs — but early tolerances still varied by manufacturer quality.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--brass)"></div>
+        <div class="tl-era">Early 20th century</div>
+        <div class="tl-title">Decline of Handmade Watches</div>
+        <div class="tl-body">Affordable American imports put handmade English and high-cost Swiss watches under fatal commercial pressure. The handmade tradition declined sharply. English watchmaking never fully recovered.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--ok)"></div>
+        <div class="tl-era">Today</div>
+        <div class="tl-title">Modern Precision — Full Interchangeability</div>
+        <div class="tl-body">Manufacturing tolerances are extremely precise even in budget movements. An escape wheel from one movement will drop straight into another of the same caliber. This is the foundation of modern servicing — you can order parts and fit them without hand-adjustment.</div>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:8px;">
+      <strong>For beginners:</strong> Handmade movements (English fusee watches, early Swiss lever watches) are <em>not</em> recommended starting points. The hand-fitting required is a specialist skill. Modern mass-produced movements like the ST36 are far more forgiving and practical to learn on.
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 2: CONSTRUCTION TYPES -->
+<div class="section" id="construction">
+  <div class="container">
+    <div class="section-tag">02 — Construction Types</div>
+    <h2>How Movements Are Constructed</h2>
+    <div class="rule"></div>
+    <p>The physical layout of plates, bridges, and cocks determines how easy a movement is to assemble, service, and work on. Construction evolved significantly across the 19th and 20th centuries.</p>
+
+    <div class="cards">
+      <div class="card bt-warn">
+        <div class="card-icon">🏛️</div>
+        <h3>Full Plate</h3>
+        <p>Two flat plates separated by pillars — like a miniature clock. The balance sat <em>outside</em> the plates under an ornate cover. Common until late 19th century. Thick, complex to assemble (all pivots must align simultaneously), and hard to service.</p>
+      </div>
+      <div class="card bt-steel">
+        <div class="card-icon">3/4</div>
+        <h3>¾ Plate</h3>
+        <p>A quarter of the top plate is cut away, allowing the balance and its cock to sit <em>inside</em> the movement. Thinner than full plate. Common in size 16 pocket watches and smaller. The balance cock and top plate sit flush, requiring a precise cutout.</p>
+      </div>
+      <div class="card bt-brass">
+        <div class="card-icon">🔩</div>
+        <h3>Bridge & Cock (Modern)</h3>
+        <p>The top plate is replaced entirely by individual bridges and cocks. Each bridge or cock supports one to four arbors. Mounted on feet, precisely located by steady pins. The dominant method in all 20th and 21st century watches.</p>
+      </div>
+    </div>
+
+    <div class="vis" style="margin-top:20px;">
+      <h3>⚙️ Bridges vs. Cocks — What's the Difference?</h3>
+      <svg viewBox="0 0 500 140" width="100%" style="max-width:500px; display:block; margin:0 auto;">
+        <!-- BRIDGE -->
+        <rect x="30" y="40" width="180" height="60" rx="4" fill="rgba(192,136,40,0.08)" stroke="var(--brass)" stroke-width="1.5"/>
+        <rect x="30" y="40" width="25" height="60" rx="3" fill="rgba(192,136,40,0.2)"/>
+        <rect x="185" y="40" width="25" height="60" rx="3" fill="rgba(192,136,40,0.2)"/>
+        <circle cx="120" cy="70" r="14" fill="rgba(192,136,40,0.15)" stroke="var(--brass)" stroke-width="1.5"/>
+        <circle cx="120" cy="70" r="5" fill="var(--brass)"/>
+        <text x="40" y="32" fill="var(--brass)" font-size="11" font-weight="500">BRIDGE</text>
+        <text x="30" y="120" fill="var(--muted)" font-size="10">Supported at BOTH ends</text>
+        <text x="30" y="132" fill="var(--muted)" font-size="10">→ more rigid, for barrel / train</text>
+
+        <!-- COCK -->
+        <rect x="300" y="40" width="140" height="60" rx="4" fill="rgba(58,106,138,0.08)" stroke="var(--steel)" stroke-width="1.5"/>
+        <rect x="300" y="40" width="25" height="60" rx="3" fill="rgba(58,106,138,0.2)"/>
+        <circle cx="390" cy="70" r="14" fill="rgba(58,106,138,0.15)" stroke="var(--steel)" stroke-width="1.5"/>
+        <circle cx="390" cy="70" r="5" fill="var(--steel)"/>
+        <text x="310" y="32" fill="var(--steel)" font-size="11" font-weight="500">COCK</text>
+        <text x="300" y="120" fill="var(--muted)" font-size="10">Supported at ONE end only</text>
+        <text x="300" y="132" fill="var(--muted)" font-size="10">→ for balance, pallet staff</text>
+      </svg>
+    </div>
+
+    <div class="callout steel" style="margin-top:4px;">
+      <strong>Why modern construction is better for watchmakers:</strong> With bridges and cocks, you assemble and test the movement in stages — fit the barrel, check it runs; add the train, check again; add the escapement. With full-plate construction you had to drop all pivots into their holes simultaneously. One mistake meant starting over.
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 3: THE MOVEMENT -->
+<div class="section" id="movement">
+  <div class="container">
+    <div class="section-tag">03 — The ST36 Movement</div>
+    <h2>The ST36 — A Modern ETA 6497 Clone</h2>
+    <div class="rule"></div>
+    <p>The ST36 is a clone of the ETA 6497 — a large, hand-wound pocket watch movement popular for its accessibility and excellent build quality. It's an ideal learning movement: big enough to work on without a microscope, well-documented, and robust.</p>
+
+    <div class="two-col">
+      <div class="info-card">
+        <div class="info-header ih-brass">Movement Dimensions</div>
+        <div class="info-body">
+          <strong>Diameter:</strong> 16½ lignes ≈ 36.60 mm<br>
+          <strong>Height:</strong> ≈ 4.5 mm (main plate bottom to highest point)<br>
+          <strong>Frequency:</strong> 18,000 VPH (2.5 Hz)<br>
+          <strong>Power reserve:</strong> ~46 hours<br>
+          <strong>Jewels:</strong> 17
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-header ih-brass">Frame Components</div>
+        <div class="info-body">
+          <strong>Main plate</strong> (also: pillar plate, dial plate, bottom plate)<br>
+          <strong>Barrel bridge</strong> — supports the mainspring barrel<br>
+          <strong>Train wheel bridge</strong> — supports center, 3rd, 4th wheels<br>
+          <strong>Pallet bridge</strong> — supports pallet fork<br>
+          <strong>Balance cock</strong> — supports balance wheel (one end only = cock)
+        </div>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:16px;">
+      <strong>Steady pins:</strong> Bridges are not just screwed down — they're also located by two steady (or locating) pins pressed into the main plate. These ensure each bridge sits in exactly the same position every time, maintaining perfect pivot alignment. You can feel them engage with a satisfying click during reassembly.
+    </div>
+
+    <h3 style="font-family:'Fraunces',serif; font-size:22px; font-weight:500; margin:24px 0 12px; color:var(--ink);">💎 Jewel Count — 17 Jewels Explained</h3>
+    <p style="font-size:15px; max-width:680px; margin-bottom:16px;">A "fully jewelled" watch has at least 15 jewels. The ST36 has 17. Each jewel serves a specific purpose — reducing friction and wear at a critical bearing point.</p>
+
+    <div class="jewel-grid">
+      <div class="jewel-item">
+        <div class="jewel-gem">💎</div>
+        <div class="jewel-count">×2</div>
+        <div class="jewel-name">Center arbor holes (top + bottom)</div>
+      </div>
+      <div class="jewel-item">
+        <div class="jewel-gem">💎</div>
+        <div class="jewel-count">×2</div>
+        <div class="jewel-name">3rd arbor pivot holes</div>
+      </div>
+      <div class="jewel-item">
+        <div class="jewel-gem">💎</div>
+        <div class="jewel-count">×2</div>
+        <div class="jewel-name">4th arbor pivot holes</div>
+      </div>
+      <div class="jewel-item">
+        <div class="jewel-gem">💎</div>
+        <div class="jewel-count">×2</div>
+        <div class="jewel-name">Escape arbor pivot holes</div>
+      </div>
+      <div class="jewel-item">
+        <div class="jewel-gem">💎</div>
+        <div class="jewel-count">×2</div>
+        <div class="jewel-name">Pallet staff pivot holes</div>
+      </div>
+      <div class="jewel-item">
+        <div class="jewel-gem">💎</div>
+        <div class="jewel-count">×2</div>
+        <div class="jewel-name">Pallet jewels (entry + exit)</div>
+      </div>
+      <div class="jewel-item">
+        <div class="jewel-gem">💎</div>
+        <div class="jewel-count">×2</div>
+        <div class="jewel-name">Balance staff holes + endstones</div>
+      </div>
+      <div class="jewel-item bt-ruby" style="border-top:3px solid var(--ruby);">
+        <div class="jewel-gem">❤️</div>
+        <div class="jewel-count" style="color:var(--ruby);">×1</div>
+        <div class="jewel-name">Impulse pin (ruby)</div>
+      </div>
+    </div>
+
+    <div class="callout ruby" style="margin-top:14px;">
+      <strong>How jewels are fitted:</strong> Train wheel jewels are <em>friction-fit</em> — pressed directly into the plate. Pallet jewels and the impulse pin are secured with <em>shellac</em> (heat-softened natural resin). Balance staff jewels are pressed into <em>shock-resistant chatons</em> (Incabloc system) so they can flex and spring back on impact, protecting the delicate balance staff pivots.
+    </div>
+
+    <div class="callout" style="margin-top:8px;">
+      <strong>Plate material:</strong> Main plate, bridges, and cocks are made from nickel-plated brass or a similar copper-based alloy. The finish (engine-turned on American watches, plain brushed on Japanese/Chinese/lower Swiss) is purely cosmetic — it has absolutely no effect on how the movement performs.
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4: THE TRAIN -->
+<div class="section" id="train">
+  <div class="container">
+    <div class="section-tag">04 — The Going Train</div>
+    <h2>The Five Wheels of the Train</h2>
+    <div class="rule"></div>
+    <p>The going train transmits energy from the mainspring barrel to the escapement, stepping up the speed at each stage. Each wheel drives the next via a small pinion — the gear ratio increases speed while reducing torque.</p>
+
+    <div class="vis-dark">
+      <h3>⚙️ Energy Flow Through the Train</h3>
+      <div class="train-flow">
+        <div class="train-node">
+          <div class="tn-circle" style="width:72px;height:72px;background:rgba(192,136,40,0.12);border-color:var(--brass);color:var(--brass-light);">1st<br>Barrel</div>
+          <div class="tn-label" style="color:#a09080;">Mainspring<br>energy source</div>
+        </div>
+        <div class="train-arrow" style="color:rgba(192,136,40,0.4);">→</div>
+        <div class="train-node">
+          <div class="tn-circle" style="width:64px;height:64px;background:rgba(58,106,138,0.12);border-color:var(--steel);color:var(--steel-light);">2nd<br>Center</div>
+          <div class="tn-label" style="color:#a09080;">1 turn/hour<br>→ minute hand</div>
+        </div>
+        <div class="train-arrow" style="color:rgba(58,106,138,0.4);">→</div>
+        <div class="train-node">
+          <div class="tn-circle" style="width:58px;height:58px;background:rgba(58,106,138,0.08);border-color:var(--steel-light);color:var(--steel-light);">3rd</div>
+          <div class="tn-label" style="color:#a09080;">Pinion cut away for 4th wheel clearance</div>
+        </div>
+        <div class="train-arrow" style="color:rgba(58,106,138,0.4);">→</div>
+        <div class="train-node">
+          <div class="tn-circle" style="width:58px;height:58px;background:rgba(58,106,138,0.08);border-color:var(--steel-light);color:var(--steel-light);">4th</div>
+          <div class="tn-label" style="color:#a09080;">1 turn/min<br>→ seconds hand (9 o'clock)</div>
+        </div>
+        <div class="train-arrow" style="color:rgba(160,48,80,0.5);">→</div>
+        <div class="train-node">
+          <div class="tn-circle" style="width:58px;height:58px;background:rgba(160,48,80,0.12);border-color:var(--ruby);color:#d08080;">Escape<br>Wheel</div>
+          <div class="tn-label" style="color:#a09080;">STEEL<br>Controlled by lever</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cards" style="margin-top:16px;">
+      <div class="card bt-brass">
+        <div class="card-icon">🥁</div>
+        <h3>1st Wheel — Barrel</h3>
+        <p>Houses the mainspring and barrel arbor. The first wheel of the power train. In this 30-hour movement, the barrel drives the center wheel directly — no intermediate wheel needed. The teeth on the barrel wall mesh with the center wheel pinion.</p>
+      </div>
+      <div class="card bt-steel">
+        <div class="card-icon">⏱️</div>
+        <h3>2nd Wheel — Center</h3>
+        <p>Directly driven by the barrel. Completes one revolution per hour — this arbor extends through the front plate to carry the <strong>cannon pinion and minute hand</strong>. Often sits at the geometric center of the movement.</p>
+      </div>
+      <div class="card bt-steel">
+        <div class="card-icon">🔧</div>
+        <h3>3rd Wheel</h3>
+        <p>Driven by the center wheel pinion. In the ST36, part of the third pinion is machined away to provide clearance for the fourth wheel to nest alongside it — an elegant space-saving solution common in this layout.</p>
+      </div>
+      <div class="card bt-steel">
+        <div class="card-icon">🔴</div>
+        <h3>4th Wheel</h3>
+        <p>Completes one revolution per minute — the front pivot carries the <strong>seconds hand</strong>, positioned at the 9 o'clock sub-dial. The 4th wheel is the key stage that steps up the train speed enough for the high-frequency escapement.</p>
+      </div>
+      <div class="card bt-ruby">
+        <div class="card-icon">⚡</div>
+        <h3>Escape Wheel</h3>
+        <p>Unlike all the other wheels, the escape wheel is made from <strong>hardened steel</strong> (not brass). Its teeth are bevelled on the underside to reduce contact area with the pallet jewels — both reducing friction and acting as an oil retention feature similar to an oil sink.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 5: BARREL ASSEMBLY -->
+<div class="section" id="barrel">
+  <div class="container">
+    <div class="section-tag">05 — Barrel Assembly</div>
+    <h2>The Barrel & Mainspring</h2>
+    <div class="rule"></div>
+    <p>The ST36 uses a standard going barrel with resilient hooking — the most common mainspring arrangement in modern watches. Here's everything you need to know to service it correctly.</p>
+
+    <div class="two-col">
+      <div class="info-card">
+        <div class="info-header ih-brass">The "Snailed" Barrel Arbor</div>
+        <div class="info-body">
+          The barrel arbor has a hook at its centre for the mainspring eye. The arbor is described as "snailed" — in practice this usually means a flat (not spiral) profile is machined onto it, rather than a true snail shape. This profile allows the spring to conform closely to the arbor, reducing distortion and ensuring smooth energy transfer.
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-header ih-brass">Resilient Hooking (Outer End)</div>
+        <div class="info-body">
+          At the outer end of the spring, the resilient hooking fits against a step in the barrel wall. Unlike a simple hook-and-eye, resilient hooking allows the spring to flex slightly, absorbing shock and reducing the risk of breakage. This is the standard arrangement in modern manual-wind watch movements.
+        </div>
+      </div>
+    </div>
+
+    <div class="callout warn" style="margin-top:16px;">
+      <strong>To open or not to open?</strong> If the barrel cover has no slot for removal, this sometimes signals the barrel should not be opened — replace as a complete unit instead. On automatic watches, the barrel may have "DO NOT OPEN" printed on it. The ST36 barrel cover <em>can</em> be removed safely for cleaning and spring replacement.
+    </div>
+
+    <div class="callout ok" style="margin-top:8px;">
+      <strong>Fitting a new mainspring:</strong> New springs come in a keeper (a small cup). Place the keeper over the barrel, verify the spring is the right way up, and press it in. New springs come pre-lubricated — do not add more lubricant. For removal, ease the spring out from the centre with brass tweezers, letting it expand into your palm in a controlled way. Wear eye protection. For refitting, always use a mainspring winder to avoid coning or distortion.
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 6: MOTION WORK -->
+<div class="section" id="motionwork">
+  <div class="container">
+    <div class="section-tag">06 — Motion Work</div>
+    <h2>Motion Work — Driving the Hands</h2>
+    <div class="rule"></div>
+    <p>The motion work sits under the dial and converts the center wheel's one-revolution-per-hour rotation into both the minute hand (1 rev/hour) and the hour hand (1 rev/12 hours). This requires a precise <strong>12:1 gear reduction</strong> in two stages.</p>
+
+    <div class="vis">
+      <h3>🕐 The 12:1 Reduction in Two Stages</h3>
+      <svg viewBox="0 0 580 150" width="100%" style="max-width:580px; display:block; margin:0 auto;">
+        <!-- Stage 1 -->
+        <circle cx="90" cy="75" r="30" fill="rgba(192,136,40,0.08)" stroke="var(--brass)" stroke-width="2"/>
+        <circle cx="90" cy="75" r="12" fill="rgba(192,136,40,0.15)" stroke="var(--brass)" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <text x="90" y="71" text-anchor="middle" fill="var(--brass)" font-size="10">CANNON</text>
+        <text x="90" y="83" text-anchor="middle" fill="var(--brass)" font-size="10">PINION</text>
+        <text x="90" y="120" text-anchor="middle" fill="var(--muted)" font-size="10">14 leaves</text>
+        <text x="90" y="132" text-anchor="middle" fill="var(--brass)" font-size="10">→ Minute hand</text>
+        <text x="90" y="25" text-anchor="middle" fill="var(--muted)" font-size="9">friction drive from center arbor</text>
+
+        <text x="175" y="70" text-anchor="middle" fill="rgba(0,0,0,0.3)" font-size="18">→</text>
+        <text x="175" y="85" text-anchor="middle" fill="var(--ok)" font-size="10">3:1</text>
+
+        <circle cx="260" cy="75" r="42" fill="rgba(58,106,138,0.06)" stroke="var(--steel)" stroke-width="2"/>
+        <circle cx="260" cy="75" r="16" fill="rgba(58,106,138,0.15)" stroke="var(--steel)" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <text x="260" y="71" text-anchor="middle" fill="var(--steel)" font-size="10">MINUTE</text>
+        <text x="260" y="83" text-anchor="middle" fill="var(--steel)" font-size="10">WHEEL</text>
+        <text x="260" y="128" text-anchor="middle" fill="var(--muted)" font-size="10">42 teeth / 8-10 leaf pinion</text>
+
+        <text x="355" y="70" text-anchor="middle" fill="rgba(0,0,0,0.3)" font-size="18">→</text>
+        <text x="355" y="85" text-anchor="middle" fill="var(--ok)" font-size="10">4:1</text>
+
+        <circle cx="460" cy="75" r="52" fill="rgba(160,48,80,0.05)" stroke="var(--ruby)" stroke-width="2"/>
+        <text x="460" y="71" text-anchor="middle" fill="var(--ruby)" font-size="10">HOUR</text>
+        <text x="460" y="83" text-anchor="middle" fill="var(--ruby)" font-size="10">WHEEL</text>
+        <text x="460" y="140" text-anchor="middle" fill="var(--ruby)" font-size="10">→ Hour hand  (1 rev / 12 hrs)</text>
+        <text x="460" y="25" text-anchor="middle" fill="var(--muted)" font-size="9">32–40 teeth</text>
+
+        <!-- Total ratio -->
+        <text x="540" y="75" fill="var(--ok)" font-size="11" text-anchor="middle">3×4</text>
+        <text x="540" y="88" fill="var(--ok)" font-size="11" text-anchor="middle">= 12:1 ✓</text>
+      </svg>
+    </div>
+
+    <div class="two-col" style="margin-top:12px;">
+      <div class="info-card">
+        <div class="info-header ih-brass">Stage 1 — 3:1</div>
+        <div class="info-body">
+          Cannon pinion (e.g. 12 leaves) meshes with the intermediate/minute wheel (e.g. 36 teeth).<br><br>
+          <strong>36 ÷ 12 = 3</strong> → for every 3 turns of the cannon pinion, the minute wheel turns once.
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-header ih-steel">Stage 2 — 4:1</div>
+        <div class="info-body">
+          Minute wheel pinion (e.g. 8–10 leaves) meshes with the hour wheel (e.g. 32–40 teeth).<br><br>
+          <strong>32 ÷ 8 = 4</strong> → for every 4 turns of the minute pinion, the hour wheel turns once.
+        </div>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:14px;">
+      <strong>The friction drive (cannon pinion):</strong> The cannon pinion is not rigidly fixed to the center arbor — it's a friction (snap) fit. Small indentations ("nips") inside the cannon pinion press against the back taper of the arbor, providing just enough grip to turn the hands during normal running. When setting the time, the cannon pinion slips around the arbor without transmitting force back into the train — protecting the escapement.
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 7: KEYLESS WORK -->
+<div class="section" id="keyless">
+  <div class="container">
+    <div class="section-tag">07 — Keyless Work</div>
+    <h2>The Keyless Winding & Setting Mechanism</h2>
+    <div class="rule"></div>
+    <p>The keyless work is the system that lets you wind the mainspring and set the hands using the crown — all without a key. Before the mid-19th century, both tasks required a separate key. Understanding the mechanism is essential because you must remove the stem before disassembling a movement.</p>
+
+    <!-- INTERACTIVE STATE SWITCHER -->
+    <div class="keyless-demo">
+      <h3>🎛 Interactive — Winding vs. Hand-Setting Mode</h3>
+      <div class="kl-toggle">
+        <button class="kl-btn active" onclick="setMode('wind')">🔄 Winding Mode</button>
+        <button class="kl-btn" onclick="setMode('set')">🕐 Hand-Setting Mode</button>
+      </div>
+
+      <!-- WINDING STATE -->
+      <div class="kl-state active" id="state-wind">
+        <p style="font-size:14px; color:var(--muted); margin-bottom:14px;"><strong style="color:var(--text)">Crown pushed IN.</strong> The yoke is pushed RIGHT by the yoke spring. The sliding pinion engages with the winding pinion via ratchet teeth. Turning the crown clockwise winds the mainspring.</p>
+        <div class="kl-path">
+          <div class="kl-step"><strong>Crown (stem)</strong>Turned clockwise</div>
+          <div class="kl-arr">→</div>
+          <div class="kl-step"><strong>Sliding Pinion</strong>Square hole on squared stem — driven directly</div>
+          <div class="kl-arr">→</div>
+          <div class="kl-step"><strong>Winding Pinion</strong>Ratchet teeth engage sliding pinion</div>
+          <div class="kl-arr">→</div>
+          <div class="kl-step"><strong>Crown Wheel</strong>Driven by winding pinion teeth</div>
+          <div class="kl-arr">→</div>
+          <div class="kl-step"><strong>Ratchet Wheel</strong>Attached to barrel arbor</div>
+          <div class="kl-arr">→</div>
+          <div class="kl-step" style="border-color:var(--brass); color:var(--brass);"><strong>Mainspring</strong>Wound ✓</div>
+        </div>
+        <div class="callout ok" style="margin-top:14px;">
+          <strong>Ratchet action:</strong> The crown can be turned backward (the familiar clicking sound) without unwinding the spring. When turned backward, the ratchet teeth on the sliding and winding pinions push the sliding pinion left, compressing the yoke spring slightly and slipping past. Forward motion re-engages the teeth. The mainspring itself is protected by the click/recoiling click on the ratchet wheel.
+        </div>
+      </div>
+
+      <!-- SETTING STATE -->
+      <div class="kl-state" id="state-set">
+        <p style="font-size:14px; color:var(--muted); margin-bottom:14px;"><strong style="color:var(--text)">Crown pulled OUT.</strong> The setting lever's nib engages the stem groove, pivoting the lever. The lever pushes the yoke LEFT. The sliding pinion disengages from the winding pinion and instead meshes with the intermediate setting wheel.</p>
+        <div class="kl-path">
+          <div class="kl-step"><strong>Stem pulled out</strong>Setting lever nib engages stem groove</div>
+          <div class="kl-arr">→</div>
+          <div class="kl-step"><strong>Setting Lever</strong>Pivots around its screw, pushes yoke LEFT</div>
+          <div class="kl-arr">→</div>
+          <div class="kl-step"><strong>Sliding Pinion</strong>Moves left — disengages winding pinion, meshes setting wheel</div>
+          <div class="kl-arr">→</div>
+          <div class="kl-step"><strong>Intermediate Setting Wheel</strong>→ 2nd Intermediate → Minute Wheel</div>
+          <div class="kl-arr">→</div>
+          <div class="kl-step" style="border-color:var(--steel); color:var(--steel);"><strong>Cannon Pinion + Hour Wheel</strong>Hands move ✓</div>
+        </div>
+        <div class="callout steel" style="margin-top:14px;">
+          <strong>No ratchet in setting mode:</strong> In hand-setting position, there is no ratchet action — the hands can be moved in both directions freely. This lets you set the time accurately by moving the hands backwards if you overshoot.
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Fraunces',serif; font-size:22px; font-weight:500; margin:28px 0 12px; color:var(--ink);">Removing the Stem</h3>
+    <div class="two-col">
+      <div class="info-card">
+        <div class="info-header ih-brass">Procedure</div>
+        <div class="info-body">
+          1. Locate the <strong>setting lever screw</strong><br>
+          2. Unscrew it approximately <strong>one turn</strong> (not all the way out)<br>
+          3. The setting lever moves away from the stem groove<br>
+          4. The stem can now be <strong>withdrawn freely</strong><br><br>
+          The setting lever screw doubles as the pivot for the setting lever — it must remain in the movement.
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-header ih-warn">Important Details</div>
+        <div class="info-body">
+          The setting lever screw has a <strong>flange</strong> that seats in recesses in both the main plate and barrel bridge — it's captive and won't fall out when unscrewed one turn.<br><br>
+          The threaded end is shouldered — it screws down firmly against the setting lever when tightened. When tightened, the lever and screw rotate together as a unit.
+        </div>
+      </div>
+    </div>
+
+    <div class="callout warn" style="margin-top:14px;">
+      <strong>Crown wheel screw — left-hand thread:</strong> The crown wheel screw uses a <em>left-hand thread</em>. This is intentional — during winding, the friction forces on the screw act in the tightening direction (for a left-hand thread), preventing it from working loose. Turn it clockwise to loosen.
+    </div>
+
+    <div class="callout" style="margin-top:8px;">
+      <strong>Recoiling click:</strong> The click on the ratchet wheel is a recoiling click — it allows the mainspring to unwind very slightly when winding stops, preventing the spring from being over-tightened. An over-tightened spring drives the balance at excessively high amplitude, causing the impulse pin to strike the outside of the lever horns — a condition called "banking." This makes the watch gain dramatically and can damage the escapement.
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 8: ESCAPEMENT -->
+<div class="section" id="escapement">
+  <div class="container">
+    <div class="section-tag">08 — Escapement & Regulator</div>
+    <h2>The Escapement & Balance</h2>
+    <div class="rule"></div>
+    <p>The vast majority of watches you'll encounter use a <strong>club tooth lever escapement</strong> — the most reliable and common escapement design ever made. The ST36 is no exception.</p>
+
+    <div class="two-col">
+      <div class="info-card">
+        <div class="info-header ih-ruby">The Escapement's Role</div>
+        <div class="info-body">
+          The escapement does two things simultaneously:<br><br>
+          1. <strong>Controls the rate</strong> at which the mainspring energy is released — one tooth of the escape wheel is let through per vibration of the balance.<br><br>
+          2. <strong>Gives the balance a push</strong> (impulse) each vibration to keep it swinging — without this the balance would stop from friction.
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-header ih-ruby">The Pallets</div>
+        <div class="info-body">
+          The pallet fork has two jewel stones (entry and exit pallets) that alternately catch and release the escape wheel teeth. The fork is connected to the balance by the impulse pin on the balance roller.<br><br>
+          The two pallet jewels and the impulse pin are all secured with <strong>shellac</strong> — not friction-fit. This is important when cleaning — shellac dissolves in alcohol-based solutions.
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col" style="margin-top:14px;">
+      <div class="info-card">
+        <div class="info-header ih-brass">The Regulator</div>
+        <div class="info-body">
+          The ST36 has an <strong>extended regulator</strong> with graduations marked on the balance cock — allowing very precise rate adjustment without a timing machine. The regulator pins move along the hairspring to change its effective length, adjusting the vibration rate and thus the timekeeping rate.<br><br>
+          Older watches may just have a "F/S" (fast/slow) scale. The graduated scale on the ST36 is more useful for fine adjustment.
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-header ih-brass">Pivot Types in the ST36</div>
+        <div class="info-body">
+          The ST36 uses two pivot types:<br><br>
+          <strong>Straight pivots</strong> — for all train wheels and the pallet staff. End shake controlled by the shoulder bearing on the plate/jewel.<br><br>
+          <strong>Conical pivots</strong> — for the balance staff only. The angled shoulder stops oil migrating up the arbor, and the absence of a sharp root corner makes the pivot far more resistant to shock breakage.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 9: ALTERNATIVE TERMS -->
+<div class="section" id="terms">
+  <div class="container">
+    <div class="section-tag">09 — Alternative Terms</div>
+    <h2>Keyless Work — Alternative Names</h2>
+    <div class="rule"></div>
+    <p>Swiss terminology is used throughout this guide, but vintage watch literature — especially English and American — uses different names for the same parts. Here's the full reference table.</p>
+
+    <div class="terms-table">
+      <div class="tt-header">
+        <div>Swiss Term (used in this guide)</div>
+        <div>Alternative Names</div>
+      </div>
+      <div class="tt-row"><div class="term">Winding Pinion</div><div class="alts">Small crown wheel</div></div>
+      <div class="tt-row"><div class="term">Sliding Pinion</div><div class="alts">Sliding clutch pinion · clutch pinion · castle wheel · clutch wheel</div></div>
+      <div class="tt-row"><div class="term">Yoke</div><div class="alts">Clutch lever · return bar</div></div>
+      <div class="tt-row"><div class="term">Crown Wheel</div><div class="alts">Large crown wheel</div></div>
+      <div class="tt-row"><div class="term">Setting Lever</div><div class="alts">Pull out piece · pull up piece · bolt</div></div>
+      <div class="tt-row"><div class="term">Setting Lever Spring</div><div class="alts">Bolt spring</div></div>
+      <div class="tt-row"><div class="term">Winding Wheel (Ratchet Wheel)</div><div class="alts">Ratchet wheel</div></div>
+    </div>
+
+    <div class="callout" style="margin-top:16px;">
+      <strong>Why this matters:</strong> When reading vintage service manuals, technical documents, or eBay part listings, you'll encounter all of these terms. The underlying mechanism is always the same — only the names change. If you understand the Swiss system described here, you'll be able to identify the corresponding part in any other terminology.
+    </div>
+
+    <!-- QUIZ -->
+    <div class="quiz" style="margin-top:24px;">
+      <h3>🎯 Final Check — Test Your Understanding</h3>
+      <div class="q-item" id="qt1">
+        <p>1. You pull the crown out to set the time. What physically moves to shift the sliding pinion into the setting position?</p>
+        <div class="q-opts">
+          <button class="q-btn" onclick="qa(this,'qt1',false)">The yoke spring directly</button>
+          <button class="q-btn" onclick="qa(this,'qt1',true)">The setting lever, pivoting around its screw</button>
+          <button class="q-btn" onclick="qa(this,'qt1',false)">The crown wheel</button>
+        </div>
+        <div class="q-fb" id="qt1-fb">✓ Correct! The stem groove engages the setting lever nib → the lever pivots → its lower end pushes the yoke left → the sliding pinion shifts into the setting position.</div>
+      </div>
+      <div class="q-item" id="qt2">
+        <p>2. Why does the crown wheel screw have a left-hand thread?</p>
+        <div class="q-opts">
+          <button class="q-btn" onclick="qa(this,'qt2',false)">To make it harder to accidentally remove</button>
+          <button class="q-btn" onclick="qa(this,'qt2',true)">Winding friction tends to tighten a left-hand thread, preventing it working loose</button>
+          <button class="q-btn" onclick="qa(this,'qt2',false)">It's just a manufacturer convention</button>
+        </div>
+        <div class="q-fb" id="qt2-fb">✓ Correct! This is a clever engineering solution — the forces generated during winding act in the direction that tightens the screw, rather than loosening it. Remember to turn it clockwise to loosen.</div>
+      </div>
+      <div class="q-item" id="qt3">
+        <p>3. What is the purpose of the recoiling click on the ratchet wheel?</p>
+        <div class="q-opts">
+          <button class="q-btn" onclick="qa(this,'qt3',false)">To allow the crown to turn backward while winding</button>
+          <button class="q-btn" onclick="qa(this,'qt3',true)">To allow the mainspring to unwind slightly after winding, preventing over-tightening and banking</button>
+          <button class="q-btn" onclick="qa(this,'qt3',false)">To lock the crown when not winding</button>
+        </div>
+        <div class="q-fb" id="qt3-fb">✓ Correct! Over-tightening the mainspring drives the balance at excessively high amplitude, causing the impulse pin to knock the lever against the banking pins — rapidly gaining rate and risking escapement damage. The recoil prevents this.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUMMARY -->
+<div class="summary">
+  <div class="sum-tag">Key Takeaways</div>
+  <blockquote>
+    "The ST36 teaches you every fundamental system in a mechanical watch — power storage, gear transmission, hand indication, winding, setting, and time regulation — all in one movement you can hold in your hand and take apart on your first day."
+  </blockquote>
+</div>
+
+<footer>
+  A Visual Guide to the ST36 · Mechanical Watchmaking Fundamentals Part V
+</footer>
+
+<script>
+  function setMode(mode) {
+    document.querySelectorAll('.kl-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.kl-state').forEach(s => s.classList.remove('active'));
+    document.getElementById('state-' + mode).classList.add('active');
+    event.target.classList.add('active');
+  }
+  function qa(btn, qid, correct) {
+    document.getElementById(qid).querySelectorAll('.q-btn').forEach(b => b.disabled = true);
+    btn.classList.add(correct ? 'correct' : 'wrong');
+    const fb = document.getElementById(qid + '-fb');
+    fb.style.display = 'block';
+    fb.style.color = correct ? 'var(--ok)' : 'var(--ruby)';
+    if (!correct) fb.textContent = '✗ Not quite — re-read the relevant section and try again.';
+  }
+</script>
+</body>
+</html>
